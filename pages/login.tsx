@@ -1,11 +1,13 @@
 import React, { useContext, useState } from "react";
 import style from './login.module.scss'
-import { API_ROOT } from "../constants";
 import { UserAuthContext } from "../contexts/UserAuthContext";
 import { useRouter } from "next/router";
+import { message } from "antd";
+import sendReauest from "../utils/sendRequest";
+import { ILoginResult } from "../dataStructures";
+import md5 from "crypto-js/md5"
 
 export default function Login() {
-  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const {setAuth} = useContext(UserAuthContext);
@@ -13,15 +15,23 @@ export default function Login() {
 
   async function handleLogin() {
     setLoading(true);
-    try {
-      const res = await fetch(`${ API_ROOT }/login`)
-      const data = await res.json()
-      if (data.success) {
-        setAuth!({loggedIn: true, displayName: data.displayName, token: data.token})
-        router.push('/')
+    const data = await sendReauest<ILoginResult>({
+      url: 'login', method: 'POST', body: {
+        password: md5(password).toString()
       }
-    } catch (e) {
-      console.error(e)
+    })
+    if (data) {
+      if (data.success) {
+        setAuth!({ loggedIn: true, token: data.token });
+        message.success('登录成功');
+        localStorage.token = data.token
+        router.push('/');
+      } else {
+        message.error('登录失败');
+        setLoading(false);
+      }
+    } else {
+      setLoading(false)
     }
   }
 
@@ -29,12 +39,8 @@ export default function Login() {
     <div className={style.loginRoot}>
       <div className={style.loginBox}>
         <h1>登录</h1>
-        <input type="text"
-               placeholder={'用户名'}
-               value={username}
-               onChange={(event) => setUsername(event.target.value)}
-        />
         <input type="password"
+               disabled={loading}
                placeholder={'密码'}
                value={password}
                onChange={(event) => setPassword(event.target.value)}

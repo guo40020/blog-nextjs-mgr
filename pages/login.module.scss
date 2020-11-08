@@ -27,9 +27,10 @@
       border: 1px solid #9c9c9c;
       border-radius: 2px;
       outline: none;
-      height: 25px;
+      height: 30px;
       padding: 5px;
       width: 60%;
+      transition: all .2s ease;
 
       &:focus {
         box-shadow: 0 0 0 2px lightblue;
@@ -45,6 +46,8 @@
       color: white;
       outline: none;
       border: none;
+      cursor: pointer;
+      transition: all .2s ease;
 
       &:hover {
         background: #4698ff;
