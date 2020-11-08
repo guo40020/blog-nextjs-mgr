@@ -1,7 +1,7 @@
 import React from "react";
-import { Card } from "antd";
+import { Card, Popconfirm } from "antd";
 import Meta from "antd/lib/card/Meta";
-import { EditOutlined, EllipsisOutlined, SettingOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 
 interface IArticleCardProps {
   title: string;
@@ -11,15 +11,18 @@ interface IArticleCardProps {
 export default function ArticleCard({ title, description }: IArticleCardProps) {
   return (
     <Card
-      actions={[
-        <SettingOutlined/>,
+      style={ { width: '20rem', margin: '1rem' } }
+      actions={ [
         <EditOutlined/>,
-        <EllipsisOutlined/>
-      ]}
+        <Popconfirm title={ '确认删除？' } okText={ '删除' } cancelText={ '取消' }
+                    icon={ <DeleteOutlined style={ { color: 'red' } }/> }>
+          <DeleteOutlined style={ { color: 'red' } }/>
+        </Popconfirm>
+      ] }
     >
       <Meta
-        title={title}
-        description={description}
+        title={ title }
+        description={ description }
       />
     </Card>
   )

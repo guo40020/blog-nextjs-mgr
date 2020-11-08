@@ -3,7 +3,7 @@ import { message } from "antd";
 
 interface IRequestConfig {
   url: string;
-  body: object;
+  body?: object;
   contentType?: string;
   method: 'GET' | 'POST';
 }
@@ -22,7 +22,7 @@ export default async function sendRequest<T>(config: IRequestConfig): Promise<T 
     });
     return await res.json();
   } catch (e) {
-    message.error(e)
+    message.error(e.toString());
     return null;
   }
 }
