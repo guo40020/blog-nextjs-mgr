@@ -7,4 +7,19 @@
   background: white;
   align-items: center;
   padding: 1rem;
+
+  .addPost {
+    padding: 2rem;
+    border: 1px solid #f0f0f0;
+    display: flex;
+    border-radius: 2px;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      box-shadow: 0 1px 4px 0 #dcdcdc;
+    }
+  }
 }

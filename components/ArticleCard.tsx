@@ -8,9 +8,10 @@ interface IArticleCardProps {
   title: string;
   description: string;
   onDelete: (id: string) => Promise<void>;
+  onEdit: (id: string) => void;
 }
 
-export default function ArticleCard({ postId, title, description, onDelete }: IArticleCardProps) {
+export default function ArticleCard({ postId, title, description, onDelete, onEdit }: IArticleCardProps) {
   async function handleConfirmDelete() {
     await onDelete(postId);
   }
@@ -19,7 +20,7 @@ export default function ArticleCard({ postId, title, description, onDelete }: IA
     <Card
       style={ { width: '20rem', margin: '1rem', flex: 'none' } }
       actions={ [
-        <EditOutlined/>,
+        <EditOutlined onClick={ () => onEdit(postId) }/>,
         <Popconfirm title={ '确认删除？' }
                     okText={ '删除' }
                     cancelText={ '取消' }

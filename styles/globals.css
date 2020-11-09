@@ -3,6 +3,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Itim&display=swap');
 @import "~highlight.js/styles/dracula.css";
 @import url('https://fonts.googleapis.com/css2?family=Fira+Code&display=swap');
+@import "~simplemde/dist/simplemde.min.css";
 
 html,
 body {
