@@ -18,6 +18,7 @@ export default async function sendRequest<T>(config: IRequestConfig): Promise<T 
       body: JSON.stringify(config.body),
       headers: {
         'content-type': config.contentType,
+        'token': localStorage.token,
       }
     });
     return await res.json();

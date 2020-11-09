@@ -39,6 +39,10 @@ export default function Home() {
     loadData();
   }, []);
 
+  async function handlePostListUpdate() {
+    await loadData();
+  }
+
   function spinner() {
     return (
       <div
@@ -53,7 +57,7 @@ export default function Home() {
       <div className={ style.indexRoot }>
         <Nav/>
         <div>
-          <PostList posts={ posts }/>
+          <PostList posts={ posts } onUpdate={ handlePostListUpdate }/>
         </div>
       </div>
     );
