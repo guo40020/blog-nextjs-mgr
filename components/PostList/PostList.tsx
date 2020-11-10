@@ -9,9 +9,10 @@ interface IPostListProps {
   posts: IPostPreview[];
   onUpdate: () => Promise<void>;
   onEdit: (id: string) => void;
+  onCreate: () => void;
 }
 
-export default function PostList({ posts, onUpdate, onEdit }: IPostListProps) {
+export default function PostList({ posts, onUpdate, onEdit, onCreate }: IPostListProps) {
   const postAvailable = posts.length > 0;
 
   async function handleArticleDelete(id: string) {
@@ -38,7 +39,7 @@ export default function PostList({ posts, onUpdate, onEdit }: IPostListProps) {
           />;
         })
       }
-      <div className={ style.addPost }>
+      <div className={ style.addPost } onClick={ onCreate }>
         <PlusOutlined/>
       </div>
     </div>

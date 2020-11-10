@@ -21,3 +21,8 @@ export interface IPostDetail {
   description: string;
   tags: string;
 }
+
+export interface IDBOperation {
+  success: boolean;
+  message?: string;
+}

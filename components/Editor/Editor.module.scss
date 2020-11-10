@@ -1,0 +1,45 @@
+.MainComponent {
+
+  .titleInput {
+    outline: none;
+    border: none;
+    border-bottom: 1px solid #aeaeae;
+    margin-bottom: 2rem;
+    text-align: center;
+    font-size: 2rem;
+  }
+
+  .centerContent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .descriptionInput {
+    border: none;
+    border-left: .5rem solid lightblue;
+    width: 25rem;
+    background: #f5f5f5;
+    color: #272822;
+    padding: .5rem;
+  }
+
+  .editorContainer {
+    margin-top: 1rem;
+  }
+
+  .tagContainer {
+    margin: .5rem 1rem;
+  }
+
+  .actionBar {
+    background: #eeeeee;
+    padding: .5rem;
+    display: flex;
+    justify-content: space-between;
+
+    button {
+      font-size: 12px;
+    }
+  }
+}

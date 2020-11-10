@@ -2,19 +2,21 @@ import React, { useContext, useEffect, useState } from "react";
 import { UserAuthContext } from "../contexts/UserAuthContext";
 import { useRouter } from "next/router";
 import Nav from "../components/nav/Nav";
-import { Spin } from "antd";
+import { message, Spin } from "antd";
 import style from './index.module.scss';
 import sendRequest from "../utils/sendRequest";
-import { IPostList, IPostPreview } from "../dataStructures";
+import { IDBOperation, IPostList, IPostPreview } from "../dataStructures";
 import PostList from "../components/PostList/PostList";
 import { IOnFinishArgs } from "../components/Editor/Editor";
 import dynamic from "next/dynamic";
+
 
 export default function Home() {
   const { auth, setAuth } = useContext(UserAuthContext);
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState<IPostPreview[]>([]);
   const [currentEditId, setCurrentEditId] = useState<string>('');
+  const [shouldEditorLoadData, setShouldEditorLoadData] = useState(false);
   const router = useRouter();
 
   const Editor = dynamic(() => import('../components/Editor/Editor'), { ssr: false });
@@ -48,47 +50,85 @@ export default function Home() {
     await loadData();
   }
 
+  async function handleFinishEditing({ title, description, content, tags }: IOnFinishArgs) {
+    let result: IDBOperation | null;
+    if (currentEditId === 'create') {
+      result = await sendRequest<IDBOperation>({
+        url: 'add_post',
+        method: 'POST',
+        body: { title, description, content, tags }
+      });
+    } else {
+      result = await sendRequest<IDBOperation>({
+        url: 'update_post',
+        method: 'POST',
+        body: { id: currentEditId, title, description, content, tags }
+      });
+    }
+    if (result && result.success) {
+      message.success('保存成功');
+    }
+    setCurrentEditId('');
+    await loadData();
+  }
+
+  function handleCancelEditing() {
+    setCurrentEditId('');
+  }
+
   function handleEdit(id: string) {
+    setShouldEditorLoadData(true);
     setCurrentEditId(id);
   }
 
-  function handleFinishEditing({ title, description, content, tags }: IOnFinishArgs) {
-
+  function handleCreateNewPost() {
+    setCurrentEditId('create');
+    setShouldEditorLoadData(false);
   }
 
-  function SpinnerComponent() {
-    return (
+  const SpinnerComponent =
+    (
       <div
         style={ { display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', width: '100vw' } }>
         <Spin tip={ '请稍后...' } size={ "large" }/>
       </div>
     );
-  }
+
 
   function EditorComponent() {
-    if (true) {
+    if (currentEditId) {
       return (
-        <div>
-          <div className={ style.editorMask }/>
-          <Editor id={ currentEditId } onFinish={ handleFinishEditing }/>
+        <div className={ style.editorPopup }>
+          <div className={ style.container }>
+            <Editor id={ currentEditId }
+                    loadData={ shouldEditorLoadData }
+                    onFinish={ handleFinishEditing }
+                    onCancel={ handleCancelEditing }
+            />
+          </div>
         </div>
       );
     }
   }
 
-  function MainComponent() {
-    return (
+  const MainComponent =
+    (
       <div className={ style.indexRoot }>
-        <Nav/>
-        <div>
-          <PostList posts={ posts } onUpdate={ handlePostListUpdate } onEdit={ handleEdit }/>
+        <div style={ { filter: currentEditId ? 'blur(2px)' : '' } }>
+          <Nav/>
+          <div>
+            <PostList posts={ posts }
+                      onUpdate={ handlePostListUpdate }
+                      onEdit={ handleEdit }
+                      onCreate={ handleCreateNewPost }/>
+          </div>
         </div>
         { EditorComponent() }
       </div>
     );
-  }
+
 
   return (
-    !auth.loggedIn || loading ? SpinnerComponent() : MainComponent()
+    !auth.loggedIn || loading ? SpinnerComponent : MainComponent
   );
 }

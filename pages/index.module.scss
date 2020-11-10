@@ -1,8 +1,4 @@
 .indexRoot {
-  .editorMask {
-    background: #616161;
-    filter: opacity(0.5);
-  }
 
   .editorPopup {
     position: absolute;
@@ -10,6 +6,14 @@
     left: 0;
     bottom: 0;
     right: 0;
+    background: rgba(17, 17, 17, .33);
+  }
 
+  .container {
+    margin: 3rem 20%;
+    background: white;
+    overflow: hidden;
+    border-radius: 5px;
+    z-index: 50;
   }
 }
