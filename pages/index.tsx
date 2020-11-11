@@ -5,7 +5,7 @@ import Nav from "../components/nav/Nav";
 import { message, Spin } from "antd";
 import style from './index.module.scss';
 import sendRequest from "../utils/sendRequest";
-import { IDBOperation, IPostList, IPostPreview } from "../dataStructures";
+import { IGeneralOperation, IPostList, IPostPreview } from "../dataStructures";
 import PostList from "../components/PostList/PostList";
 import { IOnFinishArgs } from "../components/Editor/Editor";
 import dynamic from "next/dynamic";
@@ -51,15 +51,15 @@ export default function Home() {
   }
 
   async function handleFinishEditing({ title, description, content, tags }: IOnFinishArgs) {
-    let result: IDBOperation | null;
+    let result: IGeneralOperation | null;
     if (currentEditId === 'create') {
-      result = await sendRequest<IDBOperation>({
+      result = await sendRequest<IGeneralOperation>({
         url: 'add_post',
         method: 'POST',
         body: { title, description, content, tags }
       });
     } else {
-      result = await sendRequest<IDBOperation>({
+      result = await sendRequest<IGeneralOperation>({
         url: 'update_post',
         method: 'POST',
         body: { id: currentEditId, title, description, content, tags }

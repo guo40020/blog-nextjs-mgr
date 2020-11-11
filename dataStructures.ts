@@ -22,7 +22,13 @@ export interface IPostDetail {
   tags: string;
 }
 
-export interface IDBOperation {
+export interface IGeneralOperation {
   success: boolean;
   message?: string;
+}
+
+export interface IUploadFile {
+  success: boolean;
+  message?: string;
+  url: string;
 }
