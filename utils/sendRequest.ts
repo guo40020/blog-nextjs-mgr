@@ -9,7 +9,7 @@ interface IRequestConfig {
 }
 
 export default async function sendRequest<T>(config: IRequestConfig): Promise<T | null> {
-  if (typeof config.body !== 'object' && !config.contentType) {
+  if (!(config.body instanceof FormData) && !config.contentType) {
     config.contentType = 'application/json';
   }
 
@@ -26,7 +26,12 @@ export default async function sendRequest<T>(config: IRequestConfig): Promise<T 
       body,
       headers,
     });
-    return await res.json();
+    const data = await res.json();
+    if (!data.success) {
+      message.error(data.message);
+      return null;
+    }
+    return data;
   } catch (e) {
     message.error(e.toString());
     return null;

@@ -1,21 +1,17 @@
-import React, { createRef, useEffect, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Input, message, Tag } from "antd";
 import style from './TagGroup.module.scss';
 import { PlusOutlined } from "@ant-design/icons";
 
 interface ITagGroupProps {
-  initTags: string[]
+  tags: string[],
+  setTags: React.Dispatch<string[]>
 }
 
-export default function TagGroup({ initTags }: ITagGroupProps) {
-  const [tags, setTags] = useState<string[]>([]);
+export default function TagGroup({ tags, setTags }: ITagGroupProps) {
   const [editing, setEditing] = useState(false);
   const [currentEditing, setCurrentEditing] = useState('');
-  const inputRef = createRef<any>();
-
-  useEffect(() => {
-    setTags([...initTags]);
-  }, []);
+  const inputRef = useRef<any>();
 
   function handleTagClose(index: number) {
     const t = [...tags];
@@ -36,7 +32,7 @@ export default function TagGroup({ initTags }: ITagGroupProps) {
     setCurrentEditing((e.target.value.replace(' ', '')));
   }
 
-  function handleAddComplete(e: React.KeyboardEvent<HTMLInputElement>) {
+  function handleAddComplete() {
     if (tags.indexOf(currentEditing) === -1) {
       setTags([...tags, currentEditing]);
     } else {
@@ -63,8 +59,8 @@ export default function TagGroup({ initTags }: ITagGroupProps) {
              onChange={ handleEditOnChange }
              className={ style.input }
              ref={ inputRef }
-             onBlur={ handleAddCanceled }
              onPressEnter={ handleAddComplete }
+             onKeyPress={ (e) => e.key == 'Escape' ? handleAddCanceled() : null }
       />
     </div>
   );

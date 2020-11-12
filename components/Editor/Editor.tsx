@@ -31,7 +31,7 @@ export default function Editor({ id, loadData, onFinish, onCancel }: IEditorProp
   const [description, setDescription] = useState('');
   const [content, setContent] = useState('');
   const [tags, setTags] = useState<string[]>([]);
-  const [simpeMde, setSimpleMde] = useState<SimpleMDE>();
+  const [simpleMde, setSimpleMde] = useState<SimpleMDE>();
   const [selectedFile, setSelectedFile] = useState<File[]>();
 
   async function loadDetail() {
@@ -44,7 +44,12 @@ export default function Editor({ id, loadData, onFinish, onCancel }: IEditorProp
       setTitle(data.title);
       setDescription(data.description);
       setContent(data.content);
-      setTags(data.tags.split(' '));
+      const t = data.tags.split(' ');
+      if (t.length === 1 && t[0] === '') {
+        setTags([]);
+      } else {
+        setTags(t);
+      }
     } else {
       message.error('加载失败', 5);
     }
@@ -98,8 +103,8 @@ export default function Editor({ id, loadData, onFinish, onCancel }: IEditorProp
       });
       if (res) {
         if (res.success) {
-          simpeMde!.options.insertTexts!.image = ["![](", `${ res.url })`];
-          SimpleMDE.drawImage(simpeMde!);
+          simpleMde!.options.insertTexts!.image = ["![](", `${ res.url })`];
+          SimpleMDE.drawImage(simpleMde!);
         } else {
           message.error('上传失败');
         }
@@ -146,7 +151,7 @@ export default function Editor({ id, loadData, onFinish, onCancel }: IEditorProp
           />
         </div>
         <div className={ style.tagContainer }>
-          <TagGroup initTags={ tags }/>
+          <TagGroup tags={ tags } setTags={ setTags }/>
         </div>
         <div className={ style.editorContainer }>
           <textarea style={ { height: '100%' } }
