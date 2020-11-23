@@ -1,1 +1,1 @@
-export const API_ROOT = 'http://127.0.0.1:7001'
+export const API_ROOT = 'http://api.kellyiscute.com';

@@ -103,7 +103,7 @@ export default function Editor({ id, loadData, onFinish, onCancel }: IEditorProp
       });
       if (res) {
         if (res.success) {
-          simpleMde!.options.insertTexts!.image = ["![](", `${ res.url })`];
+          simpleMde!.options.insertTexts!.image = ["![](", `http://img.kellyiscute.com/${ res.url })`];
           SimpleMDE.drawImage(simpleMde!);
         } else {
           message.error('上传失败');
