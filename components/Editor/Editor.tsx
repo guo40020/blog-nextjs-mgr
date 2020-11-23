@@ -77,7 +77,7 @@ export default function Editor({ id, loadData, onFinish, onCancel }: IEditorProp
         setContent(mde.value());
       });
 
-      for (const tool of mde.options.toolbar as SimpleMDE.ToolbarIcon[]) {
+      for (const tool of (mde as any).options.toolbar as SimpleMDE.ToolbarIcon[]) {
         if (tool.name === 'image') {
           tool.action = handleSelectImage;
         }
@@ -103,7 +103,7 @@ export default function Editor({ id, loadData, onFinish, onCancel }: IEditorProp
       });
       if (res) {
         if (res.success) {
-          simpleMde!.options.insertTexts!.image = ["![](", `http://img.kellyiscute.com/${ res.url })`];
+          (simpleMde! as any).options.insertTexts!.image = ["![](", `http://img.kellyiscute.com/${ res.url })`];
           SimpleMDE.drawImage(simpleMde!);
         } else {
           message.error('上传失败');
