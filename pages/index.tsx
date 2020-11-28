@@ -67,8 +67,8 @@ export default function Home() {
     }
     if (result && result.success) {
       message.success('保存成功');
+      setCurrentEditId('');
     }
-    setCurrentEditId('');
     await loadData();
   }
 
